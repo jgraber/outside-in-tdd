@@ -8,8 +8,8 @@
     <ProjectGuid>{CE138BB1-E1C9-46C4-9A28-28EA62056C7D}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>RunningJournalApi</RootNamespace>
-    <AssemblyName>RunningJournalApi</AssemblyName>
+    <RootNamespace>RunningJournalApi.AcceptanceTests</RootNamespace>
+    <AssemblyName>RunningJournalApi.AcceptanceTests</AssemblyName>
     <TargetFrameworkVersion>v4.6</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <NuGetPackageImportStamp>
@@ -64,6 +64,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="HomeJsonTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -71,6 +72,12 @@
   </ItemGroup>
   <ItemGroup>
     <Service Include="{82A7F48D-3B50-4B1E-B82E-3ADA8210C358}" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\RunningJournalApi\RunningJournalApi.csproj">
+      <Project>{96E802E6-FCDB-4FF6-8846-75858D1AB6E5}</Project>
+      <Name>RunningJournalApi</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
