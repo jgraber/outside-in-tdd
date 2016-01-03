@@ -58,6 +58,7 @@ namespace RunningJournalApi.UnitTests
         [InlineData(null)]
         [InlineData("   ")]
         [InlineData("foo")]
+        [InlineData("bar")]
         public void TryParseInvalidStringReturnsFalse(string invalidString)
         {
             SimpleWebToken dummy;
