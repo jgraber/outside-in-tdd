@@ -13,7 +13,15 @@ namespace RunningJournalApi
 {
     public class JournalController : ApiController
     {
-     
+        private readonly IJournalEntriesQuery query;
+        private readonly IAddJournalEntryCommand addCommand;
+
+        public JournalController(IJournalEntriesQuery query, IAddJournalEntryCommand addCommand)
+        {
+            this.query = query;
+            this.addCommand = addCommand;
+        }
+
         public HttpResponseMessage Get()
         {
             var userName = GetUserName();
