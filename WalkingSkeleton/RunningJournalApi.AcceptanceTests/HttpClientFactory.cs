@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Net.Http;
+using System.Net.Http.Headers;
 using System.Web.Http.SelfHost;
 
 namespace RunningJournalApi.AcceptanceTests
@@ -17,6 +18,7 @@ namespace RunningJournalApi.AcceptanceTests
             try
             {
                 client.BaseAddress = baseAddress;
+                client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", "userName=foo");
                 return client;
             }
             catch
