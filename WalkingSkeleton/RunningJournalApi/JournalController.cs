@@ -43,6 +43,13 @@ namespace RunningJournalApi
         {
             var userName = GetUserName();
 
+            AddJournalEntry(journal, userName);
+
+            return this.Request.CreateResponse();
+        }
+
+        private void AddJournalEntry(JournalEntryModel journal, string userName)
+        {
             var connStr = ConfigurationManager.ConnectionStrings["running-journal"].ConnectionString;
             var db = Database.OpenConnection(connStr);
 
@@ -53,8 +60,6 @@ namespace RunningJournalApi
                 Time: journal.Time,
                 Distance: journal.Distance,
                 Duration: journal.Duration);
-
-            return this.Request.CreateResponse();
         }
 
         private string GetUserName()
