@@ -2,6 +2,7 @@
 using System.Configuration;
 using System.Data.SqlClient;
 using System.Web.Http;
+using System.Web.Http.Dispatcher;
 using Newtonsoft.Json.Serialization;
 using RunningJournalApi.Properties;
 
@@ -21,6 +22,10 @@ namespace RunningJournalApi
                 });
 
             config.Formatters.JsonFormatter.SerializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver();
+
+            config.Services.Replace(
+                typeof(IHttpControllerActivator),
+                new CompositeRoot());
         }
 
         public void InstallDatabase()

@@ -66,8 +66,13 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AddJournalEntryCommand.cs" />
     <Compile Include="Bootstrap.cs" />
+    <Compile Include="CompositeRoot.cs" />
+    <Compile Include="IAddJournalEntryCommand.cs" />
+    <Compile Include="IJournalEntriesQuery.cs" />
     <Compile Include="JournalController.cs" />
+    <Compile Include="JournalEntriesQuery.cs" />
     <Compile Include="JournalEntryModel.cs" />
     <Compile Include="JournalModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
