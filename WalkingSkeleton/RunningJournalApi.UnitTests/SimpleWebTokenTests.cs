@@ -70,6 +70,7 @@ namespace RunningJournalApi.UnitTests
         [Theory]
         [InlineData(new object[] { new string[0] })]
         [InlineData(new object[] { new[] { "foo|bar" }})]
+        [InlineData(new object[] { new[] { "foo|bar", "baz|qux" } })]
         public void TryParseCorrectStringReturnsCorrectResult(
             string[] keysAndValues)
         {

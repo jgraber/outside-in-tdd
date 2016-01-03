@@ -40,13 +40,22 @@ namespace RunningJournalApi
                 return true;
             }
 
-            if (tokenString != "foo=bar")
+            if (tokenString == null)
             {
-                token = null;
                 return false;
             }
 
-            token = new SimpleWebToken(new Claim("foo", "bar"));
+            var claimPairs = tokenString.Split("&".ToArray());
+            if (!claimPairs.All(x => x.Contains("=")))
+            {
+                return false;
+            }
+
+            var claims = claimPairs
+                .Select(s => s.Split("=".ToArray()))
+                .Select(a => new Claim(a[0], a[1]));
+
+            token = new SimpleWebToken(claims.ToArray());
             return true;
         }
     }
