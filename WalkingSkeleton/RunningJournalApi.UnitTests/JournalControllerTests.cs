@@ -60,5 +60,28 @@ namespace RunningJournalApi.UnitTests
 
             Assert.True(expected.SequenceEqual(actual.Entries));
         }
+
+        [Fact]
+        public void PostInsertsEntry()
+        {
+            var queryDummy = new Mock<IJournalEntriesQuery>();
+            var cmdMock = new Mock<IAddJournalEntryCommand>();
+            var sut = new JournalController(queryDummy.Object, cmdMock.Object)
+            {
+                Request = new HttpRequestMessage()
+            };
+            sut.Request.Properties.Add(
+                HttpPropertyKeys.HttpConfigurationKey,
+                new HttpConfiguration());
+            sut.Request.Headers.Authorization =
+                new System.Net.Http.Headers.AuthenticationHeaderValue(
+                    "Bearer",
+                    new SimpleWebToken(new Claim("userName", "foo")).ToString());
+
+            var entry = new JournalEntryModel();
+            sut.Post(entry);
+
+            cmdMock.Verify(c => c.AddJournalEntry(entry, "foo"));
+        }
     }
 }
