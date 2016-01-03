@@ -36,17 +36,6 @@ namespace RunningJournalApi
                 });
         }
 
-        private dynamic GetJournalEntries(string userName)
-        {
-            var connStr = ConfigurationManager.ConnectionStrings["running-journal"].ConnectionString;
-            var db = Database.OpenConnection(connStr);
-
-            var entries = db.JournalEntry
-                .FindAll(db.JournalEntry.User.UserName == userName)
-                .ToArray<JournalEntryModel>();
-            return entries;
-        }
-
         public HttpResponseMessage Post(JournalEntryModel journal)
         {
             var userName = GetUserName();
@@ -55,21 +44,7 @@ namespace RunningJournalApi
 
             return this.Request.CreateResponse();
         }
-
-        private void AddJournalEntry(JournalEntryModel journal, string userName)
-        {
-            var connStr = ConfigurationManager.ConnectionStrings["running-journal"].ConnectionString;
-            var db = Database.OpenConnection(connStr);
-
-            var userId = db.User.Insert(UserName: userName).UserId;
-
-            db.JournalEntry.Insert(
-                UserId: userId,
-                Time: journal.Time,
-                Distance: journal.Distance,
-                Duration: journal.Duration);
-        }
-
+        
         private string GetUserName()
         {
             SimpleWebToken swt;
