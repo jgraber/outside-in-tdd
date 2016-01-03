@@ -30,5 +30,17 @@ namespace RunningJournalApi
         {
             return this.GetEnumerator();
         }
+
+        public static bool TryParse(string tokenString, out SimpleWebToken token)
+        {
+            if (tokenString == "foo")
+            {
+                token = null;
+                return false;
+            }
+
+            token = new SimpleWebToken(new Claim("foo", "bar"));
+            return true;
+        }
     }
 }
