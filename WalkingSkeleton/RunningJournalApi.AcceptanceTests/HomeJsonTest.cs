@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Configuration;
+using System.Dynamic;
 using System.Linq;
 using System.Net.Http;
 using System.Text;
@@ -8,12 +10,15 @@ using System.Web.Http.SelfHost;
 using Newtonsoft.Json;
 using Xunit;
 using RunningJournalApi;
+using Simple.Data;
+using Simple.Data.Extensions;
 
 namespace RunningJournalApi.AcceptanceTests
 {
     public class HomeJsonTest
     {
         [Fact]
+        [UseDatabase]
         public void GetResponseReturnsCorrectStatusCode()
         {
             using (var client = HttpClientFactory.Create())
@@ -27,6 +32,7 @@ namespace RunningJournalApi.AcceptanceTests
         }
 
         [Fact]
+        [UseDatabase]
         public void PostResponseReturnsCorrectStatusCode()
         {
             using (var client = HttpClientFactory.Create())
@@ -70,6 +76,41 @@ namespace RunningJournalApi.AcceptanceTests
 
                 Assert.Contains(expected, actual.entries);
                 
+            }
+        }
+
+        [Fact]
+        [UseDatabase]
+        public void GetRootReturnsCorrectEntryFromDatabase()
+        {
+            dynamic entry = new ExpandoObject();
+            entry.time = DateTimeOffset.Now;
+            entry.distance = 6000;
+            entry.duration = TimeSpan.FromMinutes(31);
+
+            var entryToSerialize = new
+            {
+                time = entry.time,
+                distance = entry.distance,
+                duration = entry.duration
+            };
+
+            var content = new JsonContent(entryToSerialize);
+            var expected = content.ReadAsJsonAsync().Result;
+
+            var connStr = ConfigurationManager.ConnectionStrings["running-journal"].ConnectionString;
+            var db = Database.OpenConnection(connStr);
+            var userId = db.User.Insert(UserName: "foo").UserId;
+            entry.UserId = (int)userId;
+            db.JournalEntry.Insert(entry);
+
+            using (var client = HttpClientFactory.Create())
+            {
+                var response = client.GetAsync("").Result;
+
+                var actual = response.Content.ReadAsJsonAsync().Result;
+
+                Assert.Contains(expected, actual.entries);
             }
         }
     }
