@@ -54,11 +54,12 @@ namespace RunningJournalApi.UnitTests
             Assert.Equal(expected, actual);
         }
 
-        [Fact]
-        public void TryParseInvalidStringReturnsFalse()
+        [Theory]
+        [InlineData(null)]
+        [InlineData("   ")]
+        [InlineData("foo")]
+        public void TryParseInvalidStringReturnsFalse(string invalidString)
         {
-            var invalidString = "foo";
-
             SimpleWebToken dummy;
             bool actual = SimpleWebToken.TryParse(invalidString, out dummy);
 
