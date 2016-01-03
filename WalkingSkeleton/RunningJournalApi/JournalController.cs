@@ -26,13 +26,13 @@ namespace RunningJournalApi
         {
             var userName = GetUserName();
 
-            var entries = GetJournalEntries(userName);
+            var entries = this.query.GetJournalEntries(userName);
 
             return this.Request.CreateResponse(
                 HttpStatusCode.OK, 
                 new JournalModel
                 {
-                    Entries = entries
+                    Entries = entries.ToArray()
                 });
         }
 
@@ -51,7 +51,7 @@ namespace RunningJournalApi
         {
             var userName = GetUserName();
 
-            AddJournalEntry(journal, userName);
+            this.addCommand.AddJournalEntry(journal, userName);
 
             return this.Request.CreateResponse();
         }
