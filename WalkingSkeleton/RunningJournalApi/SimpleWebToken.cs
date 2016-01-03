@@ -13,6 +13,11 @@ namespace RunningJournalApi
             this.claims = claims;
         }
 
+        public override string ToString()
+        {
+            return "foo=bar";
+        }
+
         public IEnumerator<Claim> GetEnumerator()
         {
             return this.claims.GetEnumerator();

@@ -32,5 +32,15 @@ namespace RunningJournalApi.UnitTests
             Assert.True(expected.SequenceEqual(sut));
             Assert.True(expected.Cast<object>().SequenceEqual(((System.Collections.IEnumerable)sut).OfType<object>()));
         }
+
+        [Fact]
+        public void ToStringReturnsCorrectResult()
+        {
+            var sut = new SimpleWebToken(new Claim("foo", "bar"));
+
+            var actual = sut.ToString();
+
+            Assert.Equal("foo=bar", actual);
+        }
     }
 }
