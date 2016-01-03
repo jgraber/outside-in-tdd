@@ -13,29 +13,35 @@ namespace RunningJournalApi
 {
     public class JournalController : ApiController
     {
-        private readonly static List<JournalEntryModel> entries = new List<JournalEntryModel>();
-
+     
         public HttpResponseMessage Get()
         {
-            SimpleWebToken swt;
-            SimpleWebToken.TryParse(this.Request.Headers.Authorization.Parameter, out swt);
-            var userName = swt.Single(c => c.Type == "userName").Value;
+            var userName = GetUserName();
 
+            var entries = GetJournalEntries(userName);
+
+            return this.Request.CreateResponse(
+                HttpStatusCode.OK, 
+                new JournalModel
+                {
+                    Entries = entries
+                });
+        }
+
+        private dynamic GetJournalEntries(string userName)
+        {
             var connStr = ConfigurationManager.ConnectionStrings["running-journal"].ConnectionString;
             var db = Database.OpenConnection(connStr);
 
             var entries = db.JournalEntry
                 .FindAll(db.JournalEntry.User.UserName == userName)
                 .ToArray<JournalEntryModel>();
-
-            return this.Request.CreateResponse(HttpStatusCode.OK, new JournalModel {Entries = entries});
+            return entries;
         }
 
         public HttpResponseMessage Post(JournalEntryModel journal)
         {
-            SimpleWebToken swt;
-            SimpleWebToken.TryParse(this.Request.Headers.Authorization.Parameter, out swt);
-            var userName = swt.Single(c => c.Type == "userName").Value;
+            var userName = GetUserName();
 
             var connStr = ConfigurationManager.ConnectionStrings["running-journal"].ConnectionString;
             var db = Database.OpenConnection(connStr);
@@ -49,6 +55,14 @@ namespace RunningJournalApi
                 Duration: journal.Duration);
 
             return this.Request.CreateResponse();
+        }
+
+        private string GetUserName()
+        {
+            SimpleWebToken swt;
+            SimpleWebToken.TryParse(this.Request.Headers.Authorization.Parameter, out swt);
+            var userName = swt.Single(c => c.Type == "userName").Value;
+            return userName;
         }
     }
 }
