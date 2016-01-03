@@ -47,6 +47,7 @@ namespace RunningJournalApi.AcceptanceTests
         }
 
         [Fact]
+        [UseDatabase]
         public void GetAfterPostResponseReturnsCorrectStatusCode()
         {
             using (var client = HttpClientFactory.Create())
