@@ -13,11 +13,31 @@ namespace RunningJournalApi.AcceptanceTests
     public class HomeJsonTest
     {
         [Fact]
-        public void GetResponseReturnCorrectStatusCode()
+        public void GetResponseReturnsCorrectStatusCode()
         {
             using (var client = HttpClientFactory.Create())
             {
                 var response = client.GetAsync("").Result;
+
+                Assert.True(
+                    response.IsSuccessStatusCode,
+                    "Actual status code: " + response.StatusCode);
+            }
+        }
+
+        [Fact]
+        public void PostResponseReturnsCorrectStatusCode()
+        {
+            using (var client = HttpClientFactory.Create())
+            {
+                var json = new
+                {
+                    time = DateTimeOffset.Now,
+                    distance = 8500,
+                    duration = TimeSpan.FromMinutes(44)
+                };
+
+                var response = client.PostAsJsonAsync("", json).Result;
 
                 Assert.True(
                     response.IsSuccessStatusCode,
