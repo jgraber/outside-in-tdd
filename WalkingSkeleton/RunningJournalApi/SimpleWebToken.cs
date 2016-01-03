@@ -33,6 +33,13 @@ namespace RunningJournalApi
 
         public static bool TryParse(string tokenString, out SimpleWebToken token)
         {
+            token = null;
+            if (tokenString == String.Empty)
+            {
+                token = new SimpleWebToken();
+                return true;
+            }
+
             if (tokenString != "foo=bar")
             {
                 token = null;

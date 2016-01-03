@@ -67,10 +67,16 @@ namespace RunningJournalApi.UnitTests
             Assert.False(actual);
         }
 
-        [Fact]
-        public void TryParseCorrectStringReturnsCorrectResult()
+        [Theory]
+        [InlineData(new object[] { new string[0] })]
+        [InlineData(new object[] { new[] { "foo|bar" }})]
+        public void TryParseCorrectStringReturnsCorrectResult(
+            string[] keysAndValues)
         {
-            var expected = new[] {new Claim("foo", "bar")};
+            var expected = keysAndValues
+                .Select(s => s.Split('|'))
+                .Select(a => new Claim(a[0], a[1]))
+                .ToArray();
 
             var tokenString = new SimpleWebToken(expected).ToString();
 
