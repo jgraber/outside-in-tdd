@@ -64,6 +64,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ContentReader.cs" />
     <Compile Include="HomeJsonTest.cs" />
     <Compile Include="HttpClientFactory.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
