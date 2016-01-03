@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using System.Security.Claims;
 
 namespace RunningJournalApi
@@ -15,7 +16,9 @@ namespace RunningJournalApi
 
         public override string ToString()
         {
-            return "foo=bar";
+            return this.claims.Select(c => c.Type + "=" + c.Value)
+                .DefaultIfEmpty(string.Empty)
+                .Aggregate((x, y) => x + "&" + y);
         }
 
         public IEnumerator<Claim> GetEnumerator()

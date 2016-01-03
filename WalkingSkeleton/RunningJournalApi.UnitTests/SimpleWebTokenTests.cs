@@ -5,6 +5,7 @@ using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
 using Xunit;
+using Xunit.Extensions;
 
 namespace RunningJournalApi.UnitTests
 {
@@ -33,14 +34,24 @@ namespace RunningJournalApi.UnitTests
             Assert.True(expected.Cast<object>().SequenceEqual(((System.Collections.IEnumerable)sut).OfType<object>()));
         }
 
-        [Fact]
-        public void ToStringReturnsCorrectResult()
+        [Theory]
+        [InlineData(new string[0], "")]
+        [InlineData(new[] {"foo|bar"}, "foo=bar")]
+        [InlineData(new[] { "foo|bar", "baz|qux" }, "foo=bar&baz=qux")]
+        public void ToStringReturnsCorrectResult(
+            string[] keysAndValues,
+            string expected)
         {
-            var sut = new SimpleWebToken(new Claim("foo", "bar"));
+            var claims = keysAndValues
+                .Select(s => s.Split('|'))
+                .Select(a => new Claim(a[0], a[1]))
+                .ToArray();
+
+            var sut = new SimpleWebToken(claims);
 
             var actual = sut.ToString();
 
-            Assert.Equal("foo=bar", actual);
+            Assert.Equal(expected, actual);
         }
     }
 }
