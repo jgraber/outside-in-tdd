@@ -99,11 +99,11 @@ namespace RunningJournalApi.UnitTests
         {
             var projectionStub = new Mock<IUserNameProjection>();
             var queryDummy = new Mock<IJournalEntriesQuery>();
-            var cmdDummy = new Mock<IAddJournalEntryCommand>();
+            var cmdMock = new Mock<IAddJournalEntryCommand>();
             var sut = new JournalController(
                 projectionStub.Object,
                 queryDummy.Object,
-                cmdDummy.Object)
+                cmdMock.Object)
             {
                 Request = new HttpRequestMessage()
             };
@@ -120,6 +120,9 @@ namespace RunningJournalApi.UnitTests
             var response = sut.Post(dummyEntry);
 
             Assert.Equal(HttpStatusCode.Unauthorized, response.StatusCode);
+            cmdMock.Verify(
+                c => c.AddJournalEntry(It.IsAny<JournalEntryModel>(), It.IsAny<string>()),
+                Times.Never);
         }
 
         [Theory]
