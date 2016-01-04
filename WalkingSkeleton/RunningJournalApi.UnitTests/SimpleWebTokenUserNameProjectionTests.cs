@@ -55,21 +55,25 @@ namespace RunningJournalApi.UnitTests
             Assert.Null(actual);
         }
 
-        [Fact]
-        public void GetUserNameFromRequestWithIncorrectAuthorizationSchemeReturnsCorrectResult()
+        [Theory]
+        [InlineData("Invalid")]
+        [InlineData("Not-Bearer")]
+        [InlineData("Bear")]
+        [InlineData("Bearer-it-is-not")]
+        public void GetUserNameFromRequestWithIncorrectAuthorizationSchemeReturnsCorrectResult(
+            string invalidSchema)
         {
             var sut = new SimpleWebTokenUserNameProjection();
 
             var request = new HttpRequestMessage();
             request.Headers.Authorization =
                 new AuthenticationHeaderValue(
-                    "Invalid",
+                    invalidSchema,
                     new SimpleWebToken(new Claim("userName", "dummy")).ToString());
 
             var actual = sut.GetUserName(request);
 
             Assert.Null(actual);
-
         }
     }
 }
