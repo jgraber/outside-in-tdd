@@ -55,5 +55,21 @@ namespace RunningJournalApi.UnitTests
             Assert.Null(actual);
         }
 
+        [Fact]
+        public void GetUserNameFromRequestWithIncorrectAuthorizationSchemeReturnsCorrectResult()
+        {
+            var sut = new SimpleWebTokenUserNameProjection();
+
+            var request = new HttpRequestMessage();
+            request.Headers.Authorization =
+                new AuthenticationHeaderValue(
+                    "Invalid",
+                    new SimpleWebToken(new Claim("userName", "dummy")).ToString());
+
+            var actual = sut.GetUserName(request);
+
+            Assert.Null(actual);
+
+        }
     }
 }

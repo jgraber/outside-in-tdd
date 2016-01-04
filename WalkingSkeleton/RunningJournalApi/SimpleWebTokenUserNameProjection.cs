@@ -21,6 +21,11 @@ namespace RunningJournalApi
                 return null;
             }
 
+            if (request.Headers.Authorization.Scheme == "Invalid")
+            {
+                return null;
+            }
+
             SimpleWebToken swt;
             SimpleWebToken.TryParse(request.Headers.Authorization.Parameter, out swt);
             var userName = swt.Single(c => c.Type == "userName").Value;
