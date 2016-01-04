@@ -9,13 +9,17 @@ using System.Web.Http;
 using System.Web.Http.Hosting;
 using Xunit;
 using Moq;
+using Xunit.Extensions;
 
 namespace RunningJournalApi.UnitTests
 {
     public class JournalControllerTests
     {
-        [Fact]
-        public void GetReturnsCorrectResult()
+        [Theory]
+        [InlineData("foo")]
+        [InlineData("bar")]
+        [InlineData("baz")]
+        public void GetReturnsCorrectResult(string userName)
         {
             var projectionStub = new Mock<IUserNameProjection>();
             var queryStub = new Mock<IJournalEntriesQuery>();
@@ -31,7 +35,7 @@ namespace RunningJournalApi.UnitTests
                 HttpPropertyKeys.HttpConfigurationKey,
                 new HttpConfiguration());
 
-            projectionStub.Setup(p => p.GetUserName(sut.Request)).Returns("foo");
+            projectionStub.Setup(p => p.GetUserName(sut.Request)).Returns(userName);
 
             var expected = new[]
             {
@@ -55,7 +59,7 @@ namespace RunningJournalApi.UnitTests
                 }
             };
 
-            queryStub.Setup(q => q.GetJournalEntries("foo")).Returns(expected);
+            queryStub.Setup(q => q.GetJournalEntries(userName)).Returns(expected);
 
             var response = sut.Get();
             var actual = response.Content.ReadAsAsync<JournalModel>().Result;
@@ -63,8 +67,11 @@ namespace RunningJournalApi.UnitTests
             Assert.True(expected.SequenceEqual(actual.Entries));
         }
 
-        [Fact]
-        public void PostInsertsEntry()
+        [Theory]
+        [InlineData("foo")]
+        [InlineData("bar")]
+        [InlineData("baz")]
+        public void PostInsertsEntry(string userName)
         {
             var projectionStub = new Mock<IUserNameProjection>();
             var queryDummy = new Mock<IJournalEntriesQuery>();
@@ -80,12 +87,12 @@ namespace RunningJournalApi.UnitTests
                 HttpPropertyKeys.HttpConfigurationKey,
                 new HttpConfiguration());
 
-            projectionStub.Setup(p => p.GetUserName(sut.Request)).Returns("foo");
+            projectionStub.Setup(p => p.GetUserName(sut.Request)).Returns(userName);
 
             var entry = new JournalEntryModel();
             sut.Post(entry);
 
-            cmdMock.Verify(c => c.AddJournalEntry(entry, "foo"));
+            cmdMock.Verify(c => c.AddJournalEntry(entry, userName));
         }
     }
 }
