@@ -29,7 +29,7 @@ namespace RunningJournalApi
 
         public HttpResponseMessage Get()
         {
-            var userName = GetUserName();
+            var userName = this.userNameProjection.GetUserName(this.Request);
 
             var entries = this.query.GetJournalEntries(userName);
 
@@ -43,7 +43,7 @@ namespace RunningJournalApi
 
         public HttpResponseMessage Post(JournalEntryModel journal)
         {
-            var userName = GetUserName();
+            var userName = this.userNameProjection.GetUserName(this.Request);
 
             this.addCommand.AddJournalEntry(journal, userName);
 
