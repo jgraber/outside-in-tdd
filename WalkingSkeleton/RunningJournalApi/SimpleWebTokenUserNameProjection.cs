@@ -31,6 +31,10 @@ namespace RunningJournalApi
             {
                 return null;
             }
+            if (!swt.Any(c => c.Type == "userName"))
+            {
+                return null;
+            }
             var userName = swt.Single(c => c.Type == "userName").Value;
             return userName;
         }

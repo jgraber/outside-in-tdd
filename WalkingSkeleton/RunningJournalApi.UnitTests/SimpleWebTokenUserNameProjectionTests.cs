@@ -91,5 +91,21 @@ namespace RunningJournalApi.UnitTests
 
             Assert.Null(actual);
         }
+
+        [Fact]
+        public void GetUserNAmeFromSimpleWebTokenWithNoUserNameReturnsCorrectResult()
+        {
+            var sut = new SimpleWebTokenUserNameProjection();
+
+            var request = new HttpRequestMessage();
+            request.Headers.Authorization =
+                new AuthenticationHeaderValue(
+                    "Bearer",
+                    new SimpleWebToken(new Claim("someClaim", "dummy")).ToString());
+
+            var actual = sut.GetUserName(request);
+
+            Assert.Null(actual);
+        }
     }
 }
