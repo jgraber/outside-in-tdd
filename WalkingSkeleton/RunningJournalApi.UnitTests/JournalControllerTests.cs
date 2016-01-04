@@ -20,17 +20,18 @@ namespace RunningJournalApi.UnitTests
             var projectionStub = new Mock<IUserNameProjection>();
             var queryStub = new Mock<IJournalEntriesQuery>();
             var cmdDummy = new Mock<IAddJournalEntryCommand>();
-            var sut = new JournalController(projectionStub.Object, queryStub.Object, cmdDummy.Object)
+            var sut = new JournalController(
+                projectionStub.Object, 
+                queryStub.Object, 
+                cmdDummy.Object)
             {
                 Request = new HttpRequestMessage()
             };
             sut.Request.Properties.Add(
                 HttpPropertyKeys.HttpConfigurationKey,
                 new HttpConfiguration());
-            sut.Request.Headers.Authorization = 
-                new System.Net.Http.Headers.AuthenticationHeaderValue(
-                    "Bearer",
-                    new SimpleWebToken(new Claim("userName", "foo")).ToString());
+
+            projectionStub.Setup(p => p.GetUserName(sut.Request)).Returns("foo");
 
             var expected = new[]
             {
@@ -68,17 +69,18 @@ namespace RunningJournalApi.UnitTests
             var projectionStub = new Mock<IUserNameProjection>();
             var queryDummy = new Mock<IJournalEntriesQuery>();
             var cmdMock = new Mock<IAddJournalEntryCommand>();
-            var sut = new JournalController(projectionStub.Object, queryDummy.Object, cmdMock.Object)
+            var sut = new JournalController(
+                projectionStub.Object, 
+                queryDummy.Object, 
+                cmdMock.Object)
             {
                 Request = new HttpRequestMessage()
             };
             sut.Request.Properties.Add(
                 HttpPropertyKeys.HttpConfigurationKey,
                 new HttpConfiguration());
-            sut.Request.Headers.Authorization =
-                new System.Net.Http.Headers.AuthenticationHeaderValue(
-                    "Bearer",
-                    new SimpleWebToken(new Claim("userName", "foo")).ToString());
+
+            projectionStub.Setup(p => p.GetUserName(sut.Request)).Returns("foo");
 
             var entry = new JournalEntryModel();
             sut.Post(entry);
