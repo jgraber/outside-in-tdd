@@ -13,11 +13,16 @@ namespace RunningJournalApi
 {
     public class JournalController : ApiController
     {
+        private readonly IUserNameProjection userNameProjection;
         private readonly IJournalEntriesQuery query;
         private readonly IAddJournalEntryCommand addCommand;
 
-        public JournalController(IJournalEntriesQuery query, IAddJournalEntryCommand addCommand)
+        public JournalController(
+            IUserNameProjection userNameProjection, 
+            IJournalEntriesQuery query, 
+            IAddJournalEntryCommand addCommand)
         {
+            this.userNameProjection = userNameProjection;
             this.query = query;
             this.addCommand = addCommand;
         }

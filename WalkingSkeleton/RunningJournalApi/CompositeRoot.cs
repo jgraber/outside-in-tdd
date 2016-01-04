@@ -15,7 +15,7 @@ namespace RunningJournalApi
             Type controllerType)
         {
             var db = CreateDb();
-            return new JournalController(new JournalEntriesQuery(db), new AddJournalEntryCommand(db));
+            return new JournalController(new SimpleWebTokenUserNameProjection(), new JournalEntriesQuery(db), new AddJournalEntryCommand(db));
         }
 
         private static dynamic CreateDb()
