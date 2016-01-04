@@ -32,5 +32,28 @@ namespace RunningJournalApi.UnitTests
 
             Assert.Equal(expected, actual);
         }
+
+        [Fact]
+        public void GetUserNameFromNullRequestThrows()
+        {
+            var sut = new SimpleWebTokenUserNameProjection();
+            Assert.Throws<ArgumentNullException>(() =>
+                sut.GetUserName(null));
+        }
+
+        [Fact]
+        public void GetUserNameFromRequestWithoutAuthorizationHeaderReturnsCorrectResult()
+        {
+            var sut = new SimpleWebTokenUserNameProjection();
+
+            var request = new HttpRequestMessage();
+            //Guard against future changes in the way the Authorization headers are uses
+            Assert.Null(request.Headers.Authorization);
+
+            var actual = sut.GetUserName(request);
+
+            Assert.Null(actual);
+        }
+
     }
 }

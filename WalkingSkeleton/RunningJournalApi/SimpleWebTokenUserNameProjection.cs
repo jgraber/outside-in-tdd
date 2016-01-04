@@ -11,6 +11,16 @@ namespace RunningJournalApi
     {
         public string GetUserName(HttpRequestMessage request)
         {
+            if (request == null)
+            {
+                throw new ArgumentNullException("request");
+            }
+
+            if (request.Headers.Authorization == null)
+            {
+                return null;
+            }
+
             SimpleWebToken swt;
             SimpleWebToken.TryParse(request.Headers.Authorization.Parameter, out swt);
             var userName = swt.Single(c => c.Type == "userName").Value;
