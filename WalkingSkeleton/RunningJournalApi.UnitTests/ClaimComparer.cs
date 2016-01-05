@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Security.Claims;
 
 namespace RunningJournalApi.UnitTests
@@ -8,8 +7,8 @@ namespace RunningJournalApi.UnitTests
     {
         public bool Equals(Claim x, Claim y)
         {
-            return object.Equals(x.Type, y.Type)
-                   && object.Equals(x.Value, y.Value);
+            return Equals(x.Type, y.Type)
+                   && Equals(x.Value, y.Value);
         }
 
         public int GetHashCode(Claim obj)

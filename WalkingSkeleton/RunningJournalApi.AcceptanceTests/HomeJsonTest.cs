@@ -1,17 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Configuration;
 using System.Dynamic;
-using System.Linq;
 using System.Net.Http;
-using System.Text;
-using System.Threading.Tasks;
-using System.Web.Http.SelfHost;
-using Newtonsoft.Json;
-using Xunit;
-using RunningJournalApi;
 using Simple.Data;
-using Simple.Data.Extensions;
+using Xunit;
 
 namespace RunningJournalApi.AcceptanceTests
 {

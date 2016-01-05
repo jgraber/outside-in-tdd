@@ -1,11 +1,8 @@
-﻿using System;
+﻿using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
-using System.Text;
-using System.Threading.Tasks;
 using Xunit;
-using Xunit.Extensions;
 
 namespace RunningJournalApi.UnitTests
 {
@@ -31,7 +28,7 @@ namespace RunningJournalApi.UnitTests
             var sut = new SimpleWebToken(expected);
 
             Assert.True(expected.SequenceEqual(sut));
-            Assert.True(expected.Cast<object>().SequenceEqual(((System.Collections.IEnumerable)sut).OfType<object>()));
+            Assert.True(expected.Cast<object>().SequenceEqual(((IEnumerable)sut).OfType<object>()));
         }
 
         [Theory]
