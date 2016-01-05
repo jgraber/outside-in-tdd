@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Reflection;
 using Xunit;
+using Xunit.Sdk;
 
 namespace RunningJournalApi.AcceptanceTests
 {
